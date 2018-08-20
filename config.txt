@@ -1,4 +1,4 @@
-Players=4
+Players=1
 #Key for each player
 #player 1 = UP:w DOWN:s
 #player 2 = UP:up DOWN:down

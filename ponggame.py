@@ -5,38 +5,21 @@ import os
 import sys
 from random import randint
 
-# -----------
-# Constantes
-# -----------
-
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 IMG_DIR = "img"
 
-# ------------------------------
-# Clases y Funciones utilizadas
-# ------------------------------
-
-
 def load_image(name, image_path, alpha=False):
-    # Encontramos la ruta completa de la imagen
     path = os.path.join(image_path, name)
     try:
         image = pygame.image.load(path)
     except:
-        print("Error, no se puede cargar la imagen: " + path)
         sys.exit(1)
-    # Comprobar si la imagen tiene "canal alpha" (como los png)
     if alpha is True:
         image = image.convert_alpha()
     else:
         image = image.convert()
     return image
-
-
-# -----------------------------------------------
-# Creamos los sprites (clases) de los objetos del juego:
-
 
 class Ball(pygame.sprite.Sprite):
 
@@ -133,7 +116,7 @@ def main():
 
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Ejemplo de un Pong Simple")
+    pygame.display.set_caption("MultiPlayer Pong")
 
     backgroud = load_image("background.jpg", IMG_DIR, alpha=False)
     ball = Ball(numberOfPlayers)
@@ -147,7 +130,6 @@ def main():
 
     clock = pygame.time.Clock()
     pygame.key.set_repeat(1, 25)
-    #pygame.mouse.set_visible(False)
 
     while True:
         clock.tick(40)
@@ -194,11 +176,6 @@ def main():
 
                 elif event.key == K_ESCAPE:
                     sys.exit(0)
-            #elif event.type == pygame.KEYUP:
-             #   if event.key == K_UP:
-             #       jugador2.rect.centery += 0
-             #   elif event.key == K_DOWN:
-             #       jugador2.rect.centery += 0
 
         screen.blit(backgroud, (0, 0))
         screen.blit(ball.image, ball.rect)
