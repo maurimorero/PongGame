@@ -82,11 +82,11 @@ class Ball(pygame.sprite.Sprite):
                 pygame.time.delay(2500)
         self.rect.move_ip((self.speed[0], self.speed[1]))
 
-    def colision(self, objetivo):
-        if self.rect.colliderect(objetivo.rect):
-            if objetivo.type == "VerticalPaddle":
+    def colision(self, objective):
+        if self.rect.colliderect(objective.rect):
+            if objective.type == "VerticalPaddle":
                 self.speed[0] = -self.speed[0]
-            elif objetivo.type == "HorizontalPaddle":
+            elif objective.type == "HorizontalPaddle":
                 self.speed[1] = -self.speed[1]
 
 
