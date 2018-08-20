@@ -51,12 +51,13 @@ def load_image(nombre, dir_imagen, alpha=False):
 class Pelota(pygame.sprite.Sprite):
     "La bola y su comportamiento en la pantalla"
 
-    def __init__(self):
+    def __init__(self,numberOfPlayers):
         pygame.sprite.Sprite.__init__(self)
         self.image = load_image("bola.png", IMG_DIR, alpha=True)
         self.rect = self.image.get_rect()
         self.rect.centerx = SCREEN_WIDTH / 2
         self.rect.centery = SCREEN_HEIGHT / 2
+        self.numberOfPlayers = numberOfPlayers
 
         randomValue = randint(1,5)
         if randomValue == 1:
@@ -67,14 +68,46 @@ class Pelota(pygame.sprite.Sprite):
             self.speed = [-3, 3]
         elif randomValue == 4:
             self.speed = [3, 3]
+        else:
+            self.speed = [3, 3]
 
     def update(self):
-        if self.rect.left < 0 or self.rect.right > SCREEN_WIDTH:
-            self.__init__()
+        if self.rect.left < 0:
+            self.__init__(self.numberOfPlayers)
             pygame.time.delay(2500)
-        if self.rect.top < 0 or self.rect.bottom > SCREEN_HEIGHT:
-            self.__init__()
-            pygame.time.delay(2500)
+        if self.rect.right > SCREEN_WIDTH:
+            if self.numberOfPlayers == 1:
+                self.speed[0] = -self.speed[0]
+            elif self.numberOfPlayers == 2:
+                self.__init__(self.numberOfPlayers)
+                pygame.time.delay(2500)
+            elif self.numberOfPlayers == 3:
+                self.__init__(self.numberOfPlayers)
+                pygame.time.delay(2500)
+            elif self.numberOfPlayers ==4:
+                self.__init__(self.numberOfPlayers)
+                pygame.time.delay(2500)
+        if self.rect.top < 0:
+            if self.numberOfPlayers == 1:
+                self.speed[1] = -self.speed[1]
+            elif self.numberOfPlayers == 2:
+                self.speed[1] = -self.speed[1]
+            elif self.numberOfPlayers ==3:
+                self.__init__(self.numberOfPlayers)
+                pygame.time.delay(2500)
+            elif self.numberOfPlayers ==4:
+                self.__init__(self.numberOfPlayers)
+                pygame.time.delay(2500)
+        if self.rect.bottom > SCREEN_HEIGHT:
+            if self.numberOfPlayers == 1:
+                self.speed[1] = -self.speed[1]
+            elif self.numberOfPlayers == 2:
+                self.speed[1] = -self.speed[1]
+            elif self.numberOfPlayers == 3:
+                self.speed[1] = -self.speed[1]
+            elif self.numberOfPlayers ==4:
+                self.__init__(self.numberOfPlayers)
+                pygame.time.delay(2500)
         self.rect.move_ip((self.speed[0], self.speed[1]))
 
     def colision(self, objetivo):
@@ -120,8 +153,10 @@ class Paleta(pygame.sprite.Sprite):
 
 def main():
     f = open('config.txt', 'r')
-    file= f.read()
-    print(file)
+    line= f.readline()
+    numberOfPlayers= int(line[-2:-1])
+    #print(numberOfPlayers)
+
     pygame.init()
     # creamos la ventana y le indicamos un titulo:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -129,11 +164,14 @@ def main():
 
     # cargamos los objetos
     fondo = load_image("fondo.jpg", IMG_DIR, alpha=False)
-    bola = Pelota()
+    bola = Pelota(numberOfPlayers)
     jugador1 = Paleta(40,SCREEN_HEIGHT/2, "VerticalPaddle")
-    jugador2 = Paleta(SCREEN_WIDTH - 40,SCREEN_HEIGHT/2,"VerticalPaddle")
-    jugador3 = Paleta(SCREEN_WIDTH /2, 40,"HorizontalPaddle")
-    jugador4 = Paleta(SCREEN_WIDTH /2, 440, "HorizontalPaddle")
+    if numberOfPlayers>1:
+        jugador2 = Paleta(SCREEN_WIDTH - 40,SCREEN_HEIGHT/2,"VerticalPaddle")
+    if numberOfPlayers>2:
+        jugador3 = Paleta(SCREEN_WIDTH /2, 40,"HorizontalPaddle")
+    if numberOfPlayers == 4:
+        jugador4 = Paleta(SCREEN_WIDTH /2, 440, "HorizontalPaddle")
 
     clock = pygame.time.Clock()
     pygame.key.set_repeat(1, 25)  # Activa repeticion de teclas
@@ -148,17 +186,29 @@ def main():
 
         # Actualizamos los obejos en pantalla
         jugador1.humano()
-        jugador2.humano()
-        jugador3.humano()
-        jugador4.humano()
+        #jugador2.humano()
+        #jugador3.humano()
+        #jugador4.humano()
+        if numberOfPlayers > 1:
+            jugador2.humano()
+        if numberOfPlayers > 2:
+            jugador3.humano()
+        if numberOfPlayers == 4:
+            jugador4.humano()
 
         bola.update()
 
         # Comprobamos si colisionan los objetos
         bola.colision(jugador1)
-        bola.colision(jugador2)
-        bola.colision(jugador3)
-        bola.colision(jugador4)
+        #bola.colision(jugador2)
+        #bola.colision(jugador3)
+        #bola.colision(jugador4)
+        if numberOfPlayers > 1:
+            bola.colision(jugador2)
+        if numberOfPlayers > 2:
+            bola.colision(jugador3)
+        if numberOfPlayers == 4:
+            bola.colision(jugador4)
 
         # Posibles entradas del teclado y mouse
         for event in pygame.event.get():
@@ -206,9 +256,15 @@ def main():
         screen.blit(fondo, (0, 0))
         screen.blit(bola.image, bola.rect)
         screen.blit(jugador1.image, jugador1.rect)
-        screen.blit(jugador2.image, jugador2.rect)
-        screen.blit(jugador3.image, jugador3.rect)
-        screen.blit(jugador4.image, jugador4.rect)
+        #screen.blit(jugador2.image, jugador2.rect)
+        #screen.blit(jugador3.image, jugador3.rect)
+        #screen.blit(jugador4.image, jugador4.rect)
+        if numberOfPlayers > 1:
+            screen.blit(jugador2.image, jugador2.rect)
+        if numberOfPlayers > 2:
+            screen.blit(jugador3.image, jugador3.rect)
+        if numberOfPlayers == 4:
+            screen.blit(jugador4.image, jugador4.rect)
         pygame.display.flip()
 
 
