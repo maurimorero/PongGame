@@ -1,5 +1,7 @@
 Players=4
-IP_Player1=
-IP_Player2=
-IP_Player3=
-IP_Player4=
+#Key for each player
+#player 1 = UP:w DOWN:s
+#player 2 = UP:up DOWN:down
+#player 3 = LEFT:r RIGHT:t
+#player 4 = LEFT:c RIGHT:v
+
